@@ -200,13 +200,33 @@
                             </li>
 
                             <li class="nav-item">
-                                <a href="usuarios"
+                                <a href="{{ route('usuarios.index') }}"
                                     class="{{ Request::path() === 'usuarios' ? 'nav-link active' : 'nav-link' }}">
                                     <i class="nav-icon fas fa-users"></i>
                                     <p>
                                         Usuarios
                                         <?php use App\User; $users_count = User::all()->count(); ?>
                                         <span class="right badge badge-danger">{{ $users_count ?? '0' }}</span>
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('categorias.index') }}"
+                                    class="{{ Request::path() === 'categorias' ? 'nav-link active' : 'nav-link' }}">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Categorias
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('productos.index') }}"
+                                    class="{{ Request::path() === 'productos' ? 'nav-link active' : 'nav-link' }}">
+                                    <i class="nav-icon fab fa-product-hunt"></i>
+                                    <p>
+                                        Productos
                                     </p>
                                 </a>
                             </li>
@@ -255,6 +275,12 @@
 
                 </div>
                 <!-- /.content-header -->
+
+                {{-- Botones --}}
+                <div class="py-4 mt-3 col-12">
+                    @yield('botones')
+                </div>
+                {{-- /.Botones --}}
 
                 <!-- Main content -->
                 <section class="content">

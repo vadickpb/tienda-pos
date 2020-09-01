@@ -22,4 +22,13 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+//usuarios
 Route::get('/usuarios', 'UserController@index')->name('usuarios.index');
+
+//categorias
+Route::get('/categorias', 'CategoriaController@index')->name('categorias.index');
+
+//productos
+Route::get('/productos', 'ProductoController@index')->name('productos.index');
+Route::get('/productos/create', 'ProductoController@create')->name('productos.create');
+Route::post('/productos', 'ProductoController@store')->name('productos.store');
