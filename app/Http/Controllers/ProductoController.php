@@ -17,8 +17,7 @@ class ProductoController extends Controller
     {
         //
         $productos = Producto::all();
-        $categorias = Categoria::all();
-        return view('productos.index', compact('productos', 'categorias'));
+        return view('productos.index', compact('productos'));
     }
 
     /**
@@ -29,7 +28,8 @@ class ProductoController extends Controller
     public function create()
     {
         //
-        return view('productos.create');
+        $categorias = Categoria::all();
+        return view('productos.create' , compact('categorias'));
     }
 
     /**
@@ -41,17 +41,38 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         //
-        dd($request->all());
 
         //Validar los datos
+        $data = $request->validate([
+            'descripcion' => 'required|min:10',
+            'categoria' => 'required',
+            'stock' => 'required|numeric',
+            'precio_de_compra' => 'required|numeric',
+            'precio_de_venta' => 'required|numeric',
+            'imagen' => 'image'
+            ]);
+            //dd($request->all());
 
+        //obtener la ruta de la imagen
+        $ruta_imagen = $request['imagen']->store('uploads-productos', 'public');
+
+        //resize de la imagen
 
         //asignar los valores
+        Producto::create([
+            'descripcion' => $data['descripcion'],
+            'categoria_id' => $data['categoria'],
+            'stock' => $data['stock'],
+            'precio_de_compra' => $data['precio_de_compra'],
+            'precio_de_venta' => $data['precio_de_venta'],
+            'imagen' => $ruta_imagen
+        ]);
 
         //guardar en la base de datos
 
 
         //redireccionar
+        return redirect()->route('productos.index');
     }
 
     /**
@@ -74,6 +95,8 @@ class ProductoController extends Controller
     public function edit(Producto $producto)
     {
         //
+        $categorias = Categoria::all();
+        return view('productos.edit', compact('categorias', 'producto'));
     }
 
     /**
@@ -85,7 +108,26 @@ class ProductoController extends Controller
      */
     public function update(Request $request, Producto $producto)
     {
-        //
+        //validar el formulario
+        $data = $request->validate([
+            'descripcion' => 'required|min:8',
+            'categoria' => 'required',
+            'stock' => 'required|numeric',
+            'precio_de_compra' => 'required|numeric',
+            'precio_de_venta' => 'required|numeric',
+            'imagen' => 'image'
+        ]);
+
+        //asignar nuevos valores
+        $producto->descripcion = $data['descripcion'];
+        $producto->categoria_id = $data['categoria'];
+        $producto->stock = $data['stock'];
+        $producto->precio_de_compra = $data['precio_de_compra'];
+        $producto->precio_de_venta = $data['precio_de_venta'];
+
+        $producto->save();
+
+        return redirect()->route('productos.index');
     }
 
     /**
@@ -97,5 +139,9 @@ class ProductoController extends Controller
     public function destroy(Producto $producto)
     {
         //
+
+
+        $producto->delete();
+        return redirect()->route('productos.index');
     }
 }
